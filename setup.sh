@@ -6,10 +6,11 @@ gsettings set org.gnome.desktop.screensaver lock-enabled false
 # List supported PHP versions of supported Moodle versions (even security ones).
 # - 39 supports 7.3.
 # - 311 supports min 7.3 up to 8.0.
-# - 400 will support min 7.4 up to 8.0.
-# - 401 will support 8.1
+# - 400 supports min 7.4 up to 8.0.
+# - 401 supports 7.4 up to 8.1
+# - 402 will support 8.0 and up
 PHP_VERSIONS=("7.3" "7.4" "8.0" "8.1")
-DEFAULT_PHP_VERSION="7.4"
+DEFAULT_PHP_VERSION="8.0"
 
 # Add ondrej/php ppa so we can install other PHP versions.
 sudo add-apt-repository ppa:ondrej/php -y
@@ -94,6 +95,11 @@ do
   # Install required PHP extensions per version.
   for j in "${PHP_EXTS[@]}"
   do
+      # PHP 8.0+ don't support XMLRPC anymore. Skip...
+      if [ "$j" == "xmlrpc" ] && [ $(echo "$phpver >= 8.0"|bc -l) -eq 1 ]
+      then
+          continue
+      fi
       PHP_INSTALL="$PHP_INSTALL php$phpver-$j"
   done
   # Install required PHP extensions.
@@ -211,11 +217,14 @@ cd ~/moodles/stable_master/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
 
+# Install utilities.
+sudo apt install -y phppgadmin phpmyadmin
+
 # Initialise Behat
-mdk behat
+# mdk behat
 
 # Set up parallel run.
-php admin/tool/behat/cli/init.php -j=2 -o
+# php admin/tool/behat/cli/init.php -j=2 -o
 
 # Reboot the machine.
 sudo reboot now
