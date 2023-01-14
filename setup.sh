@@ -1,16 +1,12 @@
 #!/bin/bash
 
+# Make all shell script files executable.
+find $(pwd) -type f -iname "*.sh" -exec chmod +x {} \;
+
+source "$(pwd)/config.sh"
+
 # Disable automatic screen lock.
 gsettings set org.gnome.desktop.screensaver lock-enabled false
-
-# List supported PHP versions of supported Moodle versions (even security ones).
-# - 39 supports 7.3.
-# - 311 supports min 7.3 up to 8.0.
-# - 400 supports min 7.4 up to 8.0.
-# - 401 supports 7.4 up to 8.1
-# - 402 will support 8.0 and up
-PHP_VERSIONS=("7.3" "7.4" "8.0" "8.1")
-DEFAULT_PHP_VERSION="8.0"
 
 # Add ondrej/php ppa so we can install other PHP versions.
 sudo add-apt-repository ppa:ondrej/php -y
@@ -65,8 +61,6 @@ sudo apt install -y postgresql postgresql-contrib
 # Set postgres account password.
 sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'moodle';"
 
-# List required PHP extensions.
-PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)
 PHP_INSTALL=""
 for phpver in "${PHP_VERSIONS[@]}"
 do
@@ -98,24 +92,15 @@ done
 # Install the ODBC Driver and SQL Command Line Utility for SQL Server.
 
 # Download Microsoft's key.
-wget https://packages.microsoft.com/keys/microsoft.asc
-# Import it.
-gpg --no-default-keyring --keyring ./temp-keyring.gpg --import microsoft.asc
-# Export as GPG.
-gpg --no-default-keyring --keyring ./temp-keyring.gpg --export --output microsoft.gpg
-# Tidy up.
-rm temp-keyring.gpg
-rm microsoft.asc
-# Add key to keyrings.
-sudo cp microsoft.gpg /etc/apt/keyrings/
+sudo wget https://packages.microsoft.com/keys/microsoft.asc -O /usr/share/keyrings/microsoft.asc
+
 # Update sources.list.d entry.
-sudo bash -c 'echo "deb [arch=amd64,armhf,arm64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/$(lsb_release -rs)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/mssql-release.list'
-sudo bash -c "curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list"
+echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/ubuntu/$(lsb_release -rs)/prod $(lsb_release -cs) main" \
+    | sudo tee /etc/apt/sources.list.d/mssql-release.list > /dev/null
 
 sudo apt update
-sudo ACCEPT_EULA=Y apt install -y msodbcsql18
 # For bcp and sqlcmd.
-sudo ACCEPT_EULA=Y apt install mssql-tools18
+sudo ACCEPT_EULA=Y apt install mssql-tools
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
@@ -134,6 +119,9 @@ done
 # Install SQL Server via docker.
 SQLSRV_PASSWD=Moodl3P@ssw0rd
 docker run --name sqlsrv -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$SQLSRV_PASSWD' -p 1433:1433 -d moodlehq/moodle-db-mssql
+
+# Setup Oracle.
+source "$(pwd)/setup/oci8.sh"
 
 # Switch to default PHP version.
 ~/apps/switchphp.sh $DEFAULT_PHP_VERSION
