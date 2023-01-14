@@ -19,7 +19,7 @@ sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update && sudo apt upgrade -y
 
 # Install docker.
-sudo apt-get install -y \
+sudo apt install -y \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -37,10 +37,10 @@ echo \
 
 sudo apt update
 
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 # Install docker compose.
-sudo apt-get install docker-compose-plugin
+sudo apt install docker-compose-plugin
 
 # Use docker as non-root user.
 dockerd-rootless-setuptool.sh install
@@ -56,27 +56,8 @@ cp ./scripts/* ~/apps
 chmod +x ~/apps/switchphp.sh
 chmod +x ~/apps/runngrok.sh
 
-# cd ~/apps
-
-# # Create postgres.
-# mkdir ~/apps/postgres
-# cd ~/apps/postgres
-
-# touch docker-compose.yml
-# echo 'version: "3"
-# services:
-#   db:
-#     image: "postgres:12"
-#     ports:
-#       - "5432:5432"
-#     environment:
-#       - POSTGRES_PASSWORD=moodle' >> docker-compose.yml
-
-# docker compose up -d
-# # Make sure to run it on system start.
-
 # Install mysql and other required programs.
-sudo apt install -y mysql-server curl git default-jdk xvfb
+sudo apt install -y mysql-server curl git default-jdk xvfb phppgadmin
 
 # Install PostgreSQL server.
 sudo apt install -y postgresql postgresql-contrib
@@ -107,8 +88,52 @@ do
 
   # Set max_input_vars to 5000.
   sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/$phpver/apache2/php.ini
+  sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/$phpver/cli/php.ini
+
+  # Reset for the next PHP version.
+  PHP_INSTALL=""
 
 done
+
+# Install the ODBC Driver and SQL Command Line Utility for SQL Server.
+
+# Download Microsoft's key.
+wget https://packages.microsoft.com/keys/microsoft.asc
+# Import it.
+gpg --no-default-keyring --keyring ./temp-keyring.gpg --import microsoft.asc
+# Export as GPG.
+gpg --no-default-keyring --keyring ./temp-keyring.gpg --export --output microsoft.gpg
+# Tidy up.
+rm temp-keyring.gpg
+rm microsoft.asc
+# Add key to keyrings.
+sudo cp microsoft.gpg /etc/apt/keyrings/
+# Update sources.list.d entry.
+sudo bash -c 'echo "deb [arch=amd64,armhf,arm64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/$(lsb_release -rs)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/mssql-release.list'
+sudo bash -c "curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list"
+
+sudo apt update
+sudo ACCEPT_EULA=Y apt install -y msodbcsql18
+# For bcp and sqlcmd.
+sudo ACCEPT_EULA=Y apt install mssql-tools18
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+sudo apt install -y unixodbc-dev
+
+# Install php-sqlsrv extension for all supported versions.
+for phpver in "${PHP_VERSIONS[@]}"
+do
+    ~/apps/switchphp.sh $phpver
+
+    sudo pecl install sqlsrv
+    sudo bash -c 'printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/$phpver/mods-available/sqlsrv.ini'
+    sudo phpenmod -v $phpver sqlsrv
+done
+
+# Install SQL Server via docker.
+SQLSRV_PASSWD=Moodl3P@ssw0rd
+docker run --name sqlsrv -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$SQLSRV_PASSWD' -p 1433:1433 -d moodlehq/moodle-db-mssql
 
 # Switch to default PHP version.
 ~/apps/switchphp.sh $DEFAULT_PHP_VERSION
@@ -134,16 +159,13 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 # Install Chrome.
 sudo apt install ./google-chrome-stable_current_amd64.deb
 
+# Tidy up.
+rm ./google-chrome-stable_current_amd64.deb
+
 # Extract version of Chrome.
 CHROME_VER=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1,2,3 --output-delimiter='.')
 
-# Install Chromium.
-# sudo apt install chromium-browser
-
-# Extract version of chromium
-# CHROME_VER=$(chromium --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2,3 --output-delimiter='.')
-
-# Extract latest version of chromedriver matching Chromium.
+# Extract latest version of chromedriver matching Chrome.
 CHROMEDRIVER_VER=$(curl --user-agent "fogent" --silent https://chromedriver.chromium.org/downloads | grep -o "${CHROME_VER}\.[0-9]*" | head -1)
 
 # Download the zip file of the chromedriver.
@@ -177,6 +199,9 @@ sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 # Download latest supported selenium standalone (3.141.59).
 wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
 
+# Move to apps folder.
+mv ./selenium-server-standalone-3.141.59.jar ~/apps
+
 # Set aliases for selenium.
 echo "alias sel='java -jar ~/apps/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
 echo "alias xsel='xvfb-run java -jar ~/apps/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
@@ -187,10 +212,10 @@ source ~/.bashrc
 # MDK.
 
 # Install required packages.
-sudo apt install -y python3-pip libmysqlclient-dev libpq-dev python3-dev unixodbc-dev
+sudo apt install -y python3-pip libmysqlclient-dev libpq-dev python3-dev
 
 # Install MDK.
-pip install moodle-sdk --user
+sudo pip install moodle-sdk
 
 # Reload paths.
 source ~/.profile
@@ -202,10 +227,14 @@ mdk config set defaultEngine pgsql
 mdk config set db.pgsql.user postgres
 mdk config set db.pgsql.passwd moodle
 mdk config set path
+mdk config set db.sqlsrv.passwd $SQLSRV_PASSWD
 
 # Create moodle instance and symlink folders.
 mkdir ~/moodles
 mkdir ~/www/mdk
+
+# Create index.php showing phpinfo();
+printf '<?php\n    phpinfo();\n' > ~/www/index.php
 
 # Create a moodle.git master instance (stable_master).
 mdk create -i -r mindev users
@@ -216,9 +245,6 @@ mdk create -i -t -r mindev users
 cd ~/moodles/stable_master/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
-
-# Install utilities.
-sudo apt install -y phppgadmin phpmyadmin
 
 # Initialise Behat
 # mdk behat
