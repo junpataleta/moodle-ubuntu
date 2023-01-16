@@ -47,7 +47,9 @@ echo "Enabling oci8 extension..."
 sudo phpenmod oci8
 
 # Install an Oracle XE DB via docker.
-docker run --name oci$ORACLE_DB_TAG -p 1521:1521 moodlehq/moodle-db-oracle-r2:$ORACLE_DB_TAG
+if [ $INSTALL_ORACLE -eq 1 ]; then
+    docker run --name oracle_$ORACLE_DB_TAG -p 1521:1521 moodlehq/moodle-db-oracle-r2:$ORACLE_DB_TAG
+fi
 
 # Tidy up.
 echo "Tidying up..."

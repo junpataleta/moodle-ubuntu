@@ -100,7 +100,7 @@ echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/microsoft.asc] h
 
 sudo apt update
 # For bcp and sqlcmd.
-sudo ACCEPT_EULA=Y apt install mssql-tools
+sudo ACCEPT_EULA=Y apt install -y mssql-tools
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
