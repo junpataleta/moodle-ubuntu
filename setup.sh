@@ -239,6 +239,3 @@ sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/
 
 # Set up parallel run.
 # php admin/tool/behat/cli/init.php -j=2 -o
-
-# Reboot the machine.
-sudo reboot now
