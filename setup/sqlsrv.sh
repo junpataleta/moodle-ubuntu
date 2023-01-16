@@ -18,20 +18,19 @@ source ~/.bashrc
 sudo apt install -y unixodbc-dev
 
 # Install php-sqlsrv extension for all supported versions.
-APPSDIR=$HOME/apps
-cd $APPSDIR
+cd $APPS_DIR
 for phpver in "${PHP_VERSIONS[@]}"
 do
     ~/apps/switchphp.sh $phpver
 
     # sudo pecl install sqlsrv
-    if [ ! -f "$APPSDIR/sqlsrv-$SQLSRV_VER.tgz" ]; then
+    if [ ! -f "$APPS_DIR/sqlsrv-$SQLSRV_VER.tgz" ]; then
         wget https://pecl.php.net/get/sqlsrv-$SQLSRV_VER.tgz
     fi
-    if [ ! -d "$APPSDIR/sqlsrv-$SQLSRV_VER" ]; then
+    if [ ! -d "$APPS_DIR/sqlsrv-$SQLSRV_VER" ]; then
         tar -xzf sqlsrv-$SQLSRV_VER.tgz
     fi
-    cd $APPSDIR/sqlsrv-$SQLSRV_VER
+    cd $APPS_DIR/sqlsrv-$SQLSRV_VER
     phpize
     ./configure
     sudo make install -B
@@ -39,7 +38,7 @@ do
     sudo phpenmod -v $phpver sqlsrv
 done
 # Tidy up.
-rm $APPSDIR/sqlsrv-$SQLSRV_VER.tgz
+rm $APPS_DIR/sqlsrv-$SQLSRV_VER.tgz
 
 # Install SQL Server via docker.
 SQLSRV_PASSWD=Moodl3P@ssw0rd

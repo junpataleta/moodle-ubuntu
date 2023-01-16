@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export APPS_DIR=$HOME/apps
+
 # List supported PHP versions of supported Moodle versions (even security ones).
 # - 39 supports 7.3.
 # - 311 supports min 7.3 up to 8.0.

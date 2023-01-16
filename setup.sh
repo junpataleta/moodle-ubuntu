@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# Make all shell script files executable.
-find $(pwd) -type f -iname "*.sh" -exec chmod +x {} \;
+SOURCE_HOME=$(pwd)
 
-source "$(pwd)/config.sh"
+# Make all shell script files executable.
+find $SOURCE_HOME -type f -iname "*.sh" -exec chmod +x {} \;
+
+source "$SOURCE_HOME/config.sh"
 
 # Disable automatic screen lock.
 gsettings set org.gnome.desktop.screensaver lock-enabled false
@@ -45,12 +47,12 @@ dockerd-rootless-setuptool.sh install
 snap install ngrok
 
 # Create apps folder.
-mkdir ~/apps
+mkdir $APPS_DIR
 
 # Copy scripts to apps folder.
-cp ./scripts/* ~/apps
-chmod +x ~/apps/switchphp.sh
-chmod +x ~/apps/runngrok.sh
+cp ./scripts/* $APPS_DIR
+chmod +x $APPS_DIR/switchphp.sh
+chmod +x $APPS_DIR/runngrok.sh
 
 # Install mysql and other required programs.
 sudo apt install -y mysql-server curl git default-jdk xvfb phppgadmin
@@ -90,13 +92,13 @@ do
 done
 
 # Install the ODBC Driver and SQL Command Line Utility for SQL Server.
-source "$(pwd)/setup/sqlsrv.sh"
+source "$SOURCE_HOME/setup/sqlsrv.sh"
 
 # Setup Oracle.
-source "$(pwd)/setup/oci8.sh"
+source "$SOURCE_HOME/setup/oci8.sh"
 
 # Switch to default PHP version.
-~/apps/switchphp.sh $DEFAULT_PHP_VERSION
+$APPS_DIR/switchphp.sh $DEFAULT_PHP_VERSION
 
 # Create www folder in home (for convenience).
 mkdir ~/www
@@ -110,14 +112,16 @@ sudo usermod -a -G `whoami` www-data
 # Restart apache.
 sudo service apache2 restart
 
+cd $APPS_DIR
+
 # Clone moodle-browser-config.
-git clone https://github.com/andrewnicols/moodle-browser-config.git ~/apps/moodle-browser-config
+git clone https://github.com/andrewnicols/moodle-browser-config.git $APPS_DIR/moodle-browser-config
 
 # Download Chrome.
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 # Install Chrome.
-sudo dpkg -i google-chrome-stable
+sudo dpkg -i ./google-chrome-stable_current_amd64.deb
 
 # Tidy up.
 rm ./google-chrome-stable_current_amd64.deb
@@ -160,11 +164,11 @@ sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
 
 # Move to apps folder.
-mv ./selenium-server-standalone-3.141.59.jar ~/apps
+mv ./selenium-server-standalone-3.141.59.jar $APPS_DIR
 
 # Set aliases for selenium.
-echo "alias sel='java -jar ~/apps/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
-echo "alias xsel='xvfb-run java -jar ~/apps/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
+echo "alias sel='java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
+echo "alias xsel='xvfb-run java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
 
 # Reload bashrc.
 source ~/.bashrc
