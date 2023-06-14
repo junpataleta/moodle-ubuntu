@@ -8,7 +8,8 @@ export APPS_DIR=$HOME/apps
 # - 400 supports min 7.4 up to 8.0.
 # - 401 supports 7.4 up to 8.1
 # - 402 will support 8.0 and up
-export PHP_VERSIONS=("8.0" "7.3" "7.4" "8.1")
+# - 403 will support 8.0 and up
+export PHP_VERSIONS=("8.0" "7.3" "7.4" "8.1" "8.2")
 export DEFAULT_PHP_VERSION="8.0"
 # List required PHP extensions.
 export PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)

@@ -21,10 +21,9 @@ A script that sets up a Moodle development environment in Ubuntu
     ```bash
     git clone https://github.com/junpataleta/moodle-ubuntu.git
     cd moodle-ubuntu
-    chmod +x setup.sh 
     ```
 
-    - **Note:** If you're using VirtualBox, this is a good point to [take a snapshot](https://docs.oracle.com/en/virtualization/virtualbox/6.0/user/snapshots.html) of the machine first so it would be easier to reset in case you need to reinstall when the setup script gets updated in the future.
+    - **Note:** If you're using VirtualBox, this is a good point to [take a snapshot](https://docs.oracle.com/en/virtualization/virtualbox/6.0/user/snapshots.html) of the machine first, so it would be easier to reset in case you need to reinstall when the setup script gets updated in the future.
 
 4. Run the script
 
@@ -44,7 +43,8 @@ After the installation, you should have the following:
     - PHP 7.3 (Moodle 3.9+)
     - PHP 7.4 (Moodle 4.0+)
     - PHP 8.0 (Moodle 3.11.8+, 4.0.2+)
-    - PHP 8.1 (master, tentative)
+    - PHP 8.1 (Moodle 4.1+, 4.2+)
+    - PHP 8.2 (Moodle 4.2.x, 4.3+) (tentative)
   - To switch PHP versions, open a terminal and run `~/apps/switchphp.sh PHPVER` where `PHPVER` is any of the installed PHP version numbers. e.g. to switch to PHP 7.4
 
     ```bash
