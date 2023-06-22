@@ -210,6 +210,9 @@ cd ~/moodles/stable_master/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
 
+# Install nvm.
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
 # Initialise Behat
 # mdk behat
 
