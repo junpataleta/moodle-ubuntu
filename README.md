@@ -39,16 +39,16 @@ After the installation, you should have the following:
 
 - Apache server
 - PHP versions supported by the lowest security-supported version of Moodle and the next major Moodle version (`main`).
-  - Current PHP versions installed:
-    - PHP 7.3 (Moodle 3.9+)
-    - PHP 7.4 (Moodle 4.0+)
-    - PHP 8.0 (Moodle 3.11.8+, 4.0.2+)
-    - PHP 8.1 (Moodle 4.1+, 4.2+)
-    - PHP 8.2 (Moodle 4.2.x, 4.3+) (tentative)
-  - To switch PHP versions, open a terminal and run `~/apps/switchphp.sh PHPVER` where `PHPVER` is any of the installed PHP version numbers. e.g. to switch to PHP 7.4
+  - PHP versions supported by [currently supported versions](https://moodledev.io/general/releases):
+    - PHP 7.4
+    - PHP 8.0
+    - PHP 8.1
+    - PHP 8.2
+    - PHP 8.3 (tentative)
+  - To switch PHP versions, open a terminal and run `~/apps/switchphp.sh PHPVER` where `PHPVER` is any of the installed PHP version numbers. e.g. to switch to PHP 8.1
 
     ```bash
-    ~/apps/switchphp.sh 7.4
+    ~/apps/switchphp.sh 8.1
     ```
 
 - PostgreSQL server version supported by your Ubuntu distribution.

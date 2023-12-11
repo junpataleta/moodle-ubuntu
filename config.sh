@@ -3,14 +3,12 @@
 export APPS_DIR=$HOME/apps
 
 # List supported PHP versions of supported Moodle versions (even security ones).
-# - 39 supports 7.3.
-# - 311 supports min 7.3 up to 8.0.
-# - 400 supports min 7.4 up to 8.0.
-# - 401 supports 7.4 up to 8.1
-# - 402 will support 8.0 and up
-# - 403 will support 8.0 and up
-export PHP_VERSIONS=("8.0" "7.3" "7.4" "8.1" "8.2")
-export DEFAULT_PHP_VERSION="8.0"
+# - 401 supports 7.4 up to 8.1.
+# - 402 supports 8.0 and 8.2.
+# - 403 supports 8.0 and up.
+# - 404 supports 8.1 and up.
+export PHP_VERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
+export DEFAULT_PHP_VERSION="8.1"
 # List required PHP extensions.
 export PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)
 
