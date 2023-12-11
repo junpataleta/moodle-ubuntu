@@ -38,7 +38,7 @@ A script that sets up a Moodle development environment in Ubuntu
 After the installation, you should have the following:
 
 - Apache server
-- PHP versions supported by the lowest security-supported version of Moodle and the next major Moodle version (master).
+- PHP versions supported by the lowest security-supported version of Moodle and the next major Moodle version (`main`).
   - Current PHP versions installed:
     - PHP 7.3 (Moodle 3.9+)
     - PHP 7.4 (Moodle 4.0+)
@@ -57,8 +57,8 @@ After the installation, you should have the following:
 - MySQL server version supported by your Ubuntu distribution.
 - MDK
   - Two instances are created by MDK during setup:
-    - An `moodle.git` instance based on the `master` branch: `http://localhost/stable_master`
-    - An `integration.git` instance based on the `master` branch: `http://localhost/integration_master`
+    - A `moodle.git` instance based on the `main` branch: `http://localhost/stable_main`
+    - An `integration.git` instance based on the `main` branch: `http://localhost/integration_main`
   - Default `admin` password for both instances is `test`.
   - Default database engine is `pgsql`.
 - Behat-related stuff:

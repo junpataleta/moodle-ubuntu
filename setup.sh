@@ -200,13 +200,13 @@ mkdir ~/www/mdk
 # Create index.php showing phpinfo();
 printf '<?php\n    phpinfo();\n' > ~/www/index.php
 
-# Create a moodle.git master instance (stable_master).
+# Create a moodle.git main instance (stable_main).
 mdk create -i -r mindev users
 
-# Create a integration.git master instance (integration_master).
+# Create a integration.git main instance (integration_main).
 mdk create -i -t -r mindev users
 
-cd ~/moodles/stable_master/moodle
+cd ~/moodles/stable_main/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
 
