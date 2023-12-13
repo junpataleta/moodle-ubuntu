@@ -57,6 +57,18 @@ chmod +x $APPS_DIR/runngrok.sh
 # Install mysql and other required programs.
 sudo apt install -y mysql-server curl git default-jdk xvfb phppgadmin
 
+# Configure Git.
+git config --global core.filemode false
+git config --global core.autocrlf false
+# Set up Git email.
+if [ -n "$GIT_EMAIL" ]; then
+  git config --global user.email "$GIT_EMAIL"
+fi
+# Set up Git name.
+if [ -n "$GIT_NAME" ]; then
+  git config --global user.name "$GIT_NAME"
+fi
+
 # Install PostgreSQL server.
 sudo apt install -y postgresql postgresql-contrib
 
@@ -187,6 +199,24 @@ source ~/.profile
 # Create MDK config.json.
 mkdir ~/.moodle-sdk
 touch ~/.moodle-sdk/config.json
+# GitHub-related MDK settings.
+if [ -n "$MDK_GITHUB_USER" ]; then
+  mdk config set remotes.mine "git@github.com:$MDK_GITHUB_USER/moodle.git"
+  mdk config set repositoryUrl "https://github.com/$MDK_GITHUB_USER/moodle.git"
+  mdk config set diffUrlTemplate "https://github.com/$MDK_GITHUB_USER/moodle/compare/%headcommit%...%branch%"
+fi
+# Tracker-related MDK settings.
+if [ -n "$MDK_TRACKER_USER" ]; then
+  mdk config set tracker.username $MDK_TRACKER_USER
+fi
+# dirs.www.
+if [ -n "$MDK_WWW_DIR" ]; then
+  mdk config set dirs.www $MDK_WWW_DIR
+fi
+# dirs.storage.
+if [ -n "$MDK_MOODLES_DIR" ]; then
+  mdk config set dirs.storage $MDK_MOODLES_DIR
+fi
 mdk config set defaultEngine pgsql
 mdk config set db.pgsql.user postgres
 mdk config set db.pgsql.passwd moodle

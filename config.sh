@@ -21,3 +21,17 @@ export INSTANTCLIENT_SDK_URL=https://download.oracle.com/otn_software/linux/inst
 export ORACLE_DB_TAG=21
 # Change to 1 if you want to install Oracle via docker during setup.
 export INSTALL_ORACLE=0
+
+# Git variables. Change these variables to configure global Git variables with your details.
+export GIT_EMAIL=""
+export GIT_NAME=""
+
+# Variables for MDK.
+# Change this to configure MDK with your GitHub username.
+export MDK_GITHUB_USER=""
+# Change this to configure MDK with your Tracker username.
+export MDK_TRACKER_USER=""
+# Change this to set the `www` folder for MDK (`dirs.www`).
+export MDK_WWW_DIR=""
+# Change this to set the `moodles` folder for MDK (`dirs.storage`).
+export MDK_MOODLES_DIR=""
