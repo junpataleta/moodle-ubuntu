@@ -16,7 +16,7 @@ A script that sets up a Moodle development environment in Ubuntu
     sudo apt update && sudo apt install -y git
     ```
 
-3. Clone this repository and make the script executable.
+3. Clone this repository.
 
     ```bash
     git clone https://github.com/junpataleta/moodle-ubuntu.git
@@ -25,13 +25,15 @@ A script that sets up a Moodle development environment in Ubuntu
 
     - **Note:** If you're using VirtualBox, this is a good point to [take a snapshot](https://docs.oracle.com/en/virtualization/virtualbox/6.0/user/snapshots.html) of the machine first, so it would be easier to reset in case you need to reinstall when the setup script gets updated in the future.
 
-4. Run the script
+4. Copy `config-dist.sh` to `config.sh` and edit the Git-related or MDK-related settings in `config.sh`. 
+
+5. Run the script
 
     ```bash
     ./setup.sh
     ```
 
-5. Grab some coffee, walk the dog, cook your lunch, do the laundry, or whatever.😛
+6. Grab some coffee, walk the dog, cook your lunch, do the laundry, or whatever.😛
 
 ## After setup
 

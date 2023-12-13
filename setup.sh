@@ -5,7 +5,13 @@ SOURCE_HOME=$(pwd)
 # Make all shell script files executable.
 find $SOURCE_HOME -type f -iname "*.sh" -exec chmod +x {} \;
 
-source "$SOURCE_HOME/config.sh"
+if [ -e "$SOURCE_HOME/config.sh" ]; then
+    source "$SOURCE_HOME/config.sh"
+else
+    # Load default config.
+    source "$SOURCE_HOME/config-dist.sh"
+fi
+
 
 # Disable automatic screen lock.
 gsettings set org.gnome.desktop.screensaver lock-enabled false
