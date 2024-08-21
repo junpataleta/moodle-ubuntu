@@ -150,19 +150,6 @@ rm geckodriver*.gz*
 # Link it to /usr/local/bin.
 sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 
-# Download latest supported selenium standalone (3.141.59).
-wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
-
-# Move to apps folder.
-mv ./selenium-server-standalone-3.141.59.jar "$APPS_DIR"
-
-# Set aliases for selenium.
-echo "alias sel='java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
-echo "alias xsel='xvfb-run java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
-
-# Reload bashrc.
-source "$HOME"/.bashrc
-
 # MDK.
 
 # Install required packages.
@@ -225,7 +212,15 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$SOURCE_HOME/setup/chromedriver.sh"
 
 # Initialise Behat
-# mdk behat
+ mdk behat
+
+# Set aliases for selenium pointing to the copy downloaded by MDK.
+SEL_CMD="java -jar $HOME/.moodle-sdk/selenium-grid.jar standalone"
+echo "alias sel='$SEL_CMD'" >> ~/.bashrc
+echo "alias xsel='xvfb-run $SEL_CMD'" >> ~/.bashrc
+
+# Reload bashrc.
+source "$HOME"/.bashrc
 
 # Set up parallel run.
 # php admin/tool/behat/cli/init.php -j=2 -o
