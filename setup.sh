@@ -3,7 +3,7 @@
 SOURCE_HOME=$(pwd)
 
 # Make all shell script files executable.
-find $SOURCE_HOME -type f -iname "*.sh" -exec chmod +x {} \;
+find "$SOURCE_HOME" -type f -iname "*.sh" -exec chmod +x {} \;
 
 if [ -e "$SOURCE_HOME/config.sh" ]; then
     source "$SOURCE_HOME/config.sh"
@@ -52,12 +52,12 @@ dockerd-rootless-setuptool.sh install
 snap install ngrok
 
 # Create apps folder.
-mkdir $APPS_DIR
+mkdir "$APPS_DIR"
 
 # Copy scripts to apps folder.
-cp ./scripts/* $APPS_DIR
-chmod +x $APPS_DIR/switchphp.sh
-chmod +x $APPS_DIR/runngrok.sh
+cp ./scripts/* "$APPS_DIR"
+chmod +x "$APPS_DIR"/switchphp.sh
+chmod +x "$APPS_DIR"/runngrok.sh
 
 # Install mysql and other required programs.
 sudo apt install -y mysql-server curl git default-jdk xvfb phppgadmin
@@ -97,11 +97,11 @@ do
       PHP_INSTALL="$PHP_INSTALL php$phpver-$j"
   done
   # Install required PHP extensions.
-  sudo apt install -y $PHP_INSTALL
+  sudo apt install -y "$PHP_INSTALL"
 
   # Set max_input_vars to 5000.
-  sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/$phpver/apache2/php.ini
-  sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/$phpver/cli/php.ini
+  sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/"$phpver"/apache2/php.ini
+  sudo sed -i_bak "/;max_input_vars.*/a max_input_vars = 5000" /etc/php/"$phpver"/cli/php.ini
 
   # Reset for the next PHP version.
   PHP_INSTALL=""
@@ -115,7 +115,7 @@ source "$SOURCE_HOME/setup/sqlsrv.sh"
 source "$SOURCE_HOME/setup/oci8.sh"
 
 # Switch to default PHP version.
-$APPS_DIR/switchphp.sh $DEFAULT_PHP_VERSION
+"$APPS_DIR"/switchphp.sh "$DEFAULT_PHP_VERSION"
 
 # Create www folder in home (for convenience).
 mkdir ~/www
@@ -154,14 +154,14 @@ sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
 
 # Move to apps folder.
-mv ./selenium-server-standalone-3.141.59.jar $APPS_DIR
+mv ./selenium-server-standalone-3.141.59.jar "$APPS_DIR"
 
 # Set aliases for selenium.
 echo "alias sel='java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
 echo "alias xsel='xvfb-run java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
 
 # Reload bashrc.
-source ~/.bashrc
+source "$HOME"/.bashrc
 
 # MDK.
 
@@ -172,7 +172,7 @@ sudo apt install -y python3-pip libmysqlclient-dev libpq-dev python3-dev
 sudo pip install moodle-sdk
 
 # Reload paths.
-source ~/.profile
+source "$HOME"/.profile
 
 # Create MDK config.json.
 mkdir ~/.moodle-sdk
@@ -185,21 +185,21 @@ if [ -n "$MDK_GITHUB_USER" ]; then
 fi
 # Tracker-related MDK settings.
 if [ -n "$MDK_TRACKER_USER" ]; then
-  mdk config set tracker.username $MDK_TRACKER_USER
+  mdk config set tracker.username "$MDK_TRACKER_USER"
 fi
 # dirs.www.
 if [ -n "$MDK_WWW_DIR" ]; then
-  mdk config set dirs.www $MDK_WWW_DIR
+  mdk config set dirs.www "$MDK_WWW_DIR"
 fi
 # dirs.storage.
 if [ -n "$MDK_MOODLES_DIR" ]; then
-  mdk config set dirs.storage $MDK_MOODLES_DIR
+  mdk config set dirs.storage "$MDK_MOODLES_DIR"
 fi
 mdk config set defaultEngine pgsql
 mdk config set db.pgsql.user postgres
 mdk config set db.pgsql.passwd moodle
 mdk config set path
-mdk config set db.sqlsrv.passwd $SQLSRV_PASSWD
+mdk config set db.sqlsrv.passwd "$SQLSRV_PASSWD"
 
 # Create moodle instance and symlink folders.
 mkdir ~/moodles
