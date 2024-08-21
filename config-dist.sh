@@ -10,7 +10,7 @@ export APPS_DIR=$HOME/apps
 export PHP_VERSIONS=("7.4" "8.0" "8.1" "8.2" "8.3")
 export DEFAULT_PHP_VERSION="8.1"
 # List required PHP extensions.
-export PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)
+export PHP_EXTS=(curl dev gd intl mbstring mysqli pgsql soap xml zip xmlrpc)
 
 # php-sqlsrv extension version. Check https://pecl.php.net/package/sqlsrv.
 export SQLSRV_VER=5.10.1
@@ -32,6 +32,6 @@ export MDK_GITHUB_USER=""
 # Change this to configure MDK with your Tracker username.
 export MDK_TRACKER_USER=""
 # Change this to set the `www` folder for MDK (`dirs.www`).
-export MDK_WWW_DIR=""
+export MDK_WWW_DIR="$HOME/www"
 # Change this to set the `moodles` folder for MDK (`dirs.storage`).
-export MDK_MOODLES_DIR=""
+export MDK_MOODLES_DIR="$HOME/moodles"
