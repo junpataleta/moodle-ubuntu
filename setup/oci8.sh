@@ -5,9 +5,9 @@ source "$(pwd)/config.sh"
 cd ~/Downloads
 
 # Download Oracle Instantclient Basic package.
-wget -O instantclient-basic.zip $INSTANTCLIENT_BASIC_URL
+wget -O instantclient-basic.zip "$INSTANTCLIENT_BASIC_URL"
 # Download Oracle Instantclient SDK package.
-wget -O instantclient-sdk.zip $INSTANTCLIENT_SDK_URL
+wget -O instantclient-sdk.zip "$INSTANTCLIENT_SDK_URL"
 
 # Unzip the instantclient packages.
 ORACLE_DIR=/opt/oracle
@@ -24,6 +24,9 @@ sudo bash -c "echo /opt/oracle/$INSTANTCLIENT_DIR > /etc/ld.so.conf.d/oracle-ins
 sudo ldconfig
 
 cd ~/apps
+if [ ! -d oci8 ]; then
+    mkdir oci8
+fi
 mkdir oci8
 cd oci8
 
@@ -52,10 +55,10 @@ do
     # Install oci8 extension via phpize. This seems to work better than using pecl.
     wget https://pecl.php.net/get/oci8$OCI8_VER.tgz
 
-    tar -xzf oci8-$OCI8_VER.tgz
-    cd oci8-$OCI8_VER
+    tar -xzf oci8$OCI8_VER.tgz
+    cd oci8$OCI8_VER
     phpize
-    ./configure -with-oci8=shared,instantclient,/opt/oracle/$INSTANTCLIENT_DIR
+    ./configure --with-oci8=shared,instantclient,/opt/oracle/"$INSTANTCLIENT_DIR"
     sudo make install
 
     # Create an ini file for the extension.
@@ -63,16 +66,16 @@ do
 
     # Enable the OCI8 extension.
     echo "Enabling oci8 extension for $phpver..."
-    sudo phpenmod -v $phpver oci8
+    sudo phpenmod -v "$phpver" oci8
 
     # Tidy up.
     cd ..
-    rm oci8-$OCI8_VER.tgz
+    rm oci8$OCI8_VER.tgz
 done
 
 # Install an Oracle XE DB via docker.
-if [ $INSTALL_ORACLE -eq 1 ]; then
-    docker run --name oracle_$ORACLE_DB_TAG -p 1521:1521 moodlehq/moodle-db-oracle-r2:$ORACLE_DB_TAG
+if [ "$INSTALL_ORACLE" -eq 1 ]; then
+    docker run --name oracle_"$ORACLE_DB_TAG" -p 1521:1521 moodlehq/moodle-db-oracle-r2:"$ORACLE_DB_TAG"
 fi
 
 # Tidy up.
@@ -81,4 +84,4 @@ rm ~/Downloads/instantclient-basic.zip
 rm ~/Downloads/instantclient-sdk.zip
 
 # Switch back to default PHP version.
-~/apps/switchphp.sh $DEFAULT_PHP_VERSION
+~/apps/switchphp.sh "$DEFAULT_PHP_VERSION"
