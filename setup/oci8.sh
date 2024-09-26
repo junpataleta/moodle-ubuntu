@@ -20,7 +20,7 @@ sudo unzip ~/Downloads/instantclient-sdk.zip
 
 # Update the runtime link path.
 INSTANTCLIENT_DIR=$(ls | grep instantclient)
-sudo bash -c "echo /opt/oracle/$INSTANTCLIENT_DIR > /etc/ld.so.conf.d/oracle-instantclient.conf"
+sudo bash -c "echo $ORACLE_DIR/$INSTANTCLIENT_DIR > /etc/ld.so.conf.d/oracle-instantclient.conf"
 sudo ldconfig
 
 cd ~/apps
@@ -41,21 +41,21 @@ do
     elif [ $(echo "$phpver == 8.1"|bc -l) -eq 1 ]; then
         OCI8_VER="-3.2.1"
     fi
-
+    OCI8=oci8$OCI8_VER
     echo "Installing OCI8 extension ($OCI8) for PHP $phpver..."
 
     # Install the oci8 extension via pecl...
     # sudo pear config-set php_ini /etc/php/$phpver/php.ini
     # sudo pecl config-set bin_dir /usr/bin/
-    # sudo bash -c "echo 'instantclient,/opt/oracle/$INSTANTCLIENT_DIR' | pecl install $OCI8"
+    # sudo bash -c "echo 'instantclient,$ORACLE_DIR/$INSTANTCLIENT_DIR' | pecl install $OCI8"
 
     # Install oci8 extension via phpize. This seems to work better than using pecl.
     wget https://pecl.php.net/get/oci8$OCI8_VER.tgz
 
-    tar -xzf oci8-$OCI8_VER.tgz
-    cd oci8-$OCI8_VER
+    tar -xzf $OCI8.tgz
+    cd $OCI8
     phpize
-    ./configure -with-oci8=shared,instantclient,/opt/oracle/$INSTANTCLIENT_DIR
+    ./configure -with-oci8=shared,instantclient,$ORACLE_DIR/$INSTANTCLIENT_DIR
     sudo make install
 
     # Create an ini file for the extension.
