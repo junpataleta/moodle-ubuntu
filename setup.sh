@@ -218,14 +218,17 @@ cd ~/moodles/stable_main/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
 
-# Install nvm.
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-
-# Setup Chrome and Chromedriver.
-source "$SOURCE_HOME/setup/chromedriver.sh"
-
 # Initialise Behat
 # mdk behat
 
 # Set up parallel run.
 # php admin/tool/behat/cli/init.php -j=2 -o
+
+# Install nvm.
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Setup Chrome and Chromedriver.
+source "$SOURCE_HOME/setup/chromedriver.sh"

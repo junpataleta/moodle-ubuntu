@@ -24,11 +24,11 @@ echo "----------------------------------------"
 # Download/update the latest stable version of Chromedriver.
 if [ ! -d "$APPS_DIR/chrome-for-testing" ]; then
   git clone https://github.com/GoogleChromeLabs/chrome-for-testing.git
-  cd chrome-for-testing
+  cd $APPS_DIR/chrome-for-testing
   nvm install
   npm install
 else
-  cd chrome-for-testing
+  cd $APPS_DIR/chrome-for-testing
   git fetch origin
   git reset --hard origin/main
   npm install
@@ -39,12 +39,18 @@ CHROMEDRIVER_URL=$(npm run find | grep "$CHROME_VER.*chromedriver-linux64" | cut
 cd $APPS_DIR
 
 # Download the zip file of the chromedriver.
+echo "Downloading Chromedriver from $CHROMEDRIVER_URL..."
 wget $CHROMEDRIVER_URL
 
 # Extract it.
 unzip -o -p chromedriver-linux64.zip chromedriver-linux64/chromedriver >chromedriver
 
-# Link it to /usr/local/bin.
+# Ensure ChromeDriver is executable.
+if [[ ! -x "chromedriver" ]]; then
+  chmod +x chromedriver
+fi
+
+# Link it to /usr/local/bin, if necessary.
 if [ ! -f "/usr/local/bin/chromedriver" ]; then
     sudo ln -s "$APPS_DIR/chromedriver" /usr/local/bin/chromedriver
 fi
