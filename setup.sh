@@ -12,7 +12,6 @@ else
     source "$SOURCE_HOME/config-dist.sh"
 fi
 
-
 # Disable automatic screen lock.
 gsettings set org.gnome.desktop.screensaver lock-enabled false
 
@@ -135,33 +134,6 @@ cd $APPS_DIR
 # Clone moodle-browser-config.
 git clone https://github.com/andrewnicols/moodle-browser-config.git $APPS_DIR/moodle-browser-config
 
-# Download Chrome.
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
-# Install Chrome.
-sudo dpkg -i ./google-chrome-stable_current_amd64.deb
-
-# Tidy up.
-rm ./google-chrome-stable_current_amd64.deb
-
-# Extract version of Chrome.
-CHROME_VER=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1,2,3 --output-delimiter='.')
-
-# Extract latest version of chromedriver matching Chrome.
-CHROMEDRIVER_VER=$(curl --user-agent "fogent" --silent https://chromedriver.chromium.org/downloads | grep -o "${CHROME_VER}\.[0-9]*" | head -1)
-
-# Download the zip file of the chromedriver.
-wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VER/chromedriver_linux64.zip
-
-# Extract it.
-unzip chromedriver_linux64.zip
-
-# Delete it.
-rm chromedriver_linux64.zip
-
-# Link it to /usr/local/bin.
-sudo ln -s "$(pwd)/chromedriver" /usr/local/bin/chromedriver
-
 # Download latest geckodriver.
 curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest \
   | grep browser_download_url \
@@ -248,6 +220,9 @@ sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/
 
 # Install nvm.
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+# Setup Chrome and Chromedriver.
+source "$SOURCE_HOME/setup/chromedriver.sh"
 
 # Initialise Behat
 # mdk behat
