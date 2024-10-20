@@ -169,7 +169,14 @@ source ~/.bashrc
 sudo apt install -y python3-pip libmysqlclient-dev libpq-dev python3-dev
 
 # Install MDK.
-sudo pip install moodle-sdk
+UBUNTU_VER=$(lsb_release -r | awk '{print $2}')
+breaksystempackages=""
+# Check if the Ubuntu version is 23.04 or above.
+if [[ $(echo -e "$UBUNTU_VER\n23.04" | sort -V | head -n1) == "23.04" ]]; then
+  # For Ubuntu 23.04 and above, add the --break-system-packages flag.
+  breaksystempackages="--break-system-packages"
+fi
+sudo pip install moodle-sdk $breaksystempackages
 
 # Reload paths.
 source ~/.profile
