@@ -1,3 +1,5 @@
+![Build workflow](https://github.com/junpataleta/moodle-ubuntu/actions/workflows/ci.yml/badge.svg)
+
 # moodle-ubuntu
 
 A script that sets up a Moodle development environment in Ubuntu
