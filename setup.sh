@@ -160,9 +160,6 @@ rm geckodriver*.gz*
 # Link it to /usr/local/bin.
 sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 
-# Reload bashrc.
-source ~/.bashrc
-
 # MDK.
 
 # Install required packages.
@@ -242,8 +239,11 @@ sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/
 # Initialise Behat. This will set up Behat and download Selenium server as well.
 mdk behat
 
-# Set aliases for selenium.
+# Set alias for selenium.
 echo "alias sel='java -jar ${HOME}/.moodle-sdk/selenium-grid.jar standalone'" >> ~/.bashrc
+
+# Reload bashrc.
+source ~/.bashrc
 
 # Set up parallel run.
 # php admin/tool/behat/cli/init.php -j=2 -o
