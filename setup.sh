@@ -121,9 +121,14 @@ $APPS_DIR/switchphp.sh $DEFAULT_PHP_VERSION
 
 # Create www folder in home (for convenience).
 mkdir ~/www
-# Point the document root here.
-sudo sed -i_bak "/DocumentRoot.*/c DocumentRoot\ \/home\/$(whoami)\/www" /etc/apache2/sites-available/000-default.conf
-sudo sed -i_bak "/Directory\ \/var\/www/c <Directory\ \/home\/$(whoami)\/www\/>" /etc/apache2/apache2.conf
+
+# Update the Apache configuration.
+sudo cp -R "${SOURCE_HOME}"/conf/apache2/* /etc/apache2/
+sudo sed -i "s@/home/moodle@$HOME@g" /etc/apache2/sites-available/moodle.conf
+
+sudo a2enmod rewrite
+sudo a2dissite 000-default
+sudo a2ensite moodle
 
 # Add the www-data user to the current user's group to gain access to ~/www.
 sudo usermod -a -G `whoami` www-data
