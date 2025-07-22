@@ -71,9 +71,7 @@ do
 done
 
 # Install an Oracle XE DB via docker.
-if [ $INSTALL_ORACLE -eq 1 ]; then
-    docker run --name oracle_$ORACLE_DB_TAG -p 1521:1521 moodlehq/moodle-db-oracle-r2:$ORACLE_DB_TAG
-fi
+docker run --name oracle_$ORACLE_DB_TAG -p 1521:1521 moodlehq/moodle-db-oracle-r2:$ORACLE_DB_TAG
 
 # Tidy up.
 echo "Tidying up..."

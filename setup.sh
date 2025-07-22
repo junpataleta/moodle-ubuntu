@@ -112,7 +112,9 @@ done
 source "$SOURCE_HOME/setup/sqlsrv.sh"
 
 # Setup Oracle.
-source "$SOURCE_HOME/setup/oci8.sh"
+if [ $INSTALL_ORACLE -eq 1 ]; then
+    source "$SOURCE_HOME/setup/oci8.sh"
+fi
 
 # Switch to default PHP version.
 $APPS_DIR/switchphp.sh $DEFAULT_PHP_VERSION
