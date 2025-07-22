@@ -60,7 +60,7 @@ chmod +x $APPS_DIR/switchphp.sh
 chmod +x $APPS_DIR/runngrok.sh
 
 # Install mysql and other required programs.
-sudo apt install -y mysql-server curl git default-jdk xvfb phppgadmin
+sudo apt install -y mysql-server curl git default-jdk phppgadmin
 
 # Configure Git.
 git config --global core.filemode false
@@ -157,16 +157,6 @@ rm geckodriver*.gz*
 # Link it to /usr/local/bin.
 sudo ln -s "$(pwd)/geckodriver" /usr/local/bin/geckodriver
 
-# Download latest supported selenium standalone (3.141.59).
-wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
-
-# Move to apps folder.
-mv ./selenium-server-standalone-3.141.59.jar $APPS_DIR
-
-# Set aliases for selenium.
-echo "alias sel='java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
-echo "alias xsel='xvfb-run java -jar $APPS_DIR/selenium-server-standalone-3.141.59.jar'" >> ~/.bashrc
-
 # Reload bashrc.
 source ~/.bashrc
 
@@ -232,8 +222,11 @@ cd ~/moodles/stable_main/moodle
 
 sed -i_bak "/^.*setup\.php.*/i require_once('${HOME}/apps/moodle-browser-config/init.php');" config.php
 
-# Initialise Behat
-# mdk behat
+# Initialise Behat. This will set up Behat and download Selenium server as well.
+mdk behat
+
+# Set aliases for selenium.
+echo "alias sel='java -jar ${HOME}/.moodle-sdk/selenium-grid.jar standalone'" >> ~/.bashrc
 
 # Set up parallel run.
 # php admin/tool/behat/cli/init.php -j=2 -o
