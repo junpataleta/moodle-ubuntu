@@ -59,8 +59,8 @@ cp ./scripts/* $APPS_DIR
 chmod +x $APPS_DIR/switchphp.sh
 chmod +x $APPS_DIR/runngrok.sh
 
-# Install mysql and other required programs.
-sudo apt install -y mysql-server curl git default-jdk phppgadmin
+# Install required programs.
+sudo apt install -y curl git default-jdk
 
 # Configure Git.
 git config --global core.filemode false
@@ -73,12 +73,6 @@ fi
 if [ -n "$GIT_NAME" ]; then
   git config --global user.name "$GIT_NAME"
 fi
-
-# Install PostgreSQL server.
-sudo apt install -y postgresql postgresql-contrib
-
-# Set postgres account password.
-sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'moodle';"
 
 PHP_INSTALL=""
 for phpver in "${PHP_VERSIONS[@]}"
@@ -107,6 +101,15 @@ do
   PHP_INSTALL=""
 
 done
+
+# Set up PostgreSQL client and docker container.
+source "$SOURCE_HOME/setup/pgsql.sh"
+
+# Set up MariaDB client and docker container.
+source "$SOURCE_HOME/setup/mariadb.sh"
+
+# Set up MySQL client and docker container.
+source "$SOURCE_HOME/setup/mysqli.sh"
 
 # Install the ODBC Driver and SQL Command Line Utility for SQL Server.
 source "$SOURCE_HOME/setup/sqlsrv.sh"
@@ -199,11 +202,21 @@ fi
 if [ -n "$MDK_MOODLES_DIR" ]; then
   mdk config set dirs.storage $MDK_MOODLES_DIR
 fi
+# Set PostgreSQL settings.
 mdk config set defaultEngine pgsql
 mdk config set db.pgsql.user postgres
-mdk config set db.pgsql.passwd moodle
-mdk config set path
+mdk config set db.pgsql.passwd $PGSQL_PASSWD
+# Set MariaDB settings.
+mdk config set db.mariadb.host 127.0.0.1
+mdk config set db.mariadb.passwd $MARIADB_PASSWD
+mdk config set db.mariadb.port $MARIADB_PORT
+# Set MySQLi settings.
+mdk config set db.mysqli.host 127.0.0.1
+mdk config set db.mysqli.passwd $MYSQLI_PASSWD
+mdk config set db.mysqli.port $MYSQLI_PORT
 mdk config set db.sqlsrv.passwd $SQLSRV_PASSWD
+
+mdk config set path
 
 # Create moodle instance and symlink folders.
 mkdir ~/moodles
@@ -211,6 +224,9 @@ mkdir ~/www/mdk
 
 # Create index.php showing phpinfo();
 printf '<?php\n    phpinfo();\n' > ~/www/index.php
+
+# Download adminer and save it to ~/www/adminer.php.
+wget https://www.adminer.org/latest.php -O ~/www/adminer.php
 
 # Create a moodle.git main instance (stable_main).
 mdk create -i -r mindev users

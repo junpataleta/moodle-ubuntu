@@ -12,6 +12,27 @@ export DEFAULT_PHP_VERSION="8.2"
 # List required PHP extensions.
 export PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)
 
+# PostgreSQL variables.
+# Minimum supported PostgreSQL version by the main branch.
+export PGSQL_TAG=15
+# Password.
+export PGSQL_PASSWD=moodle
+
+# MariaDB variables.
+# Minimum supported MariaDB version by the main branch.
+export MARIADB_TAG=10.11
+# Password.
+export MARIADB_PASSWD=moodle
+export MARIADB_PORT=3306
+
+# MySQL variables.
+# Minimum supported MySQL version by the main branch.
+export MYSQLI_TAG=8.4
+# Password.
+export MYSQLI_PASSWD=moodle
+# To use MySQL together with MariaDB, they need to run on different ports.
+export MYSQLI_PORT=3307
+
 # php-sqlsrv extension version. Check https://pecl.php.net/package/sqlsrv.
 export SQLSRV_VER=5.10.1
 
