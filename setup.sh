@@ -123,9 +123,10 @@ $APPS_DIR/switchphp.sh $DEFAULT_PHP_VERSION
 mkdir ~/www
 
 # Update the Apache configuration.
-cp -R "${SOURCE_HOME}"/conf/apache2/* /etc/apache2/
-sed -i "s@/home/moodle@$HOME@g" /etc/apache2/sites-available/moodle.conf
+sudo cp -R "${SOURCE_HOME}"/conf/apache2/* /etc/apache2/
+sudo sed -i "s@/home/moodle@$HOME@g" /etc/apache2/sites-available/moodle.conf
 
+sudo a2enmod rewrite
 sudo a2dissite 000-default
 sudo a2ensite moodle
 
