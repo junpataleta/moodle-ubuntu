@@ -48,11 +48,12 @@ After the installation, you should have the following:
     - PHP 8.0
     - PHP 8.1
     - PHP 8.2
-    - PHP 8.3 (tentative)
-  - To switch PHP versions, open a terminal and run `~/apps/switchphp.sh PHPVER` where `PHPVER` is any of the installed PHP version numbers. e.g. to switch to PHP 8.1
+    - PHP 8.3
+    - PHP 8.4
+  - To switch PHP versions, open a terminal and run `~/apps/switchphp.sh PHPVER` where `PHPVER` is any of the installed PHP version numbers. e.g. to switch to PHP 8.2
 
     ```bash
-    ~/apps/switchphp.sh 8.1
+    ~/apps/switchphp.sh 8.2
     ```
 
 - PostgreSQL server version supported by your Ubuntu distribution.
@@ -70,8 +71,9 @@ After the installation, you should have the following:
   - Chromedriver
   - Geckodriver
   - Selenium
-  - xvfb
+    - Just run the command `sel` to start the Selenium server.
 - Docker with Docker compose
 - Ngrok
+- Adminer: `http://localhost/adminer.php`
 
 Enjoy!

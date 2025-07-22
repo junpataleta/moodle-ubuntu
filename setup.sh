@@ -217,6 +217,7 @@ mdk config set db.mysqli.port $MYSQLI_PORT
 mdk config set db.sqlsrv.passwd $SQLSRV_PASSWD
 
 mdk config set path
+mdk config set behat.useSeleniumGrid True
 
 # Create moodle instance and symlink folders.
 mkdir ~/moodles
