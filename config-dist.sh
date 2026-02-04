@@ -14,7 +14,7 @@ export PHP_EXTS=(dev pgsql intl mysqli xml mbstring curl zip gd soap xmlrpc)
 
 # PostgreSQL variables.
 # Minimum supported PostgreSQL version by the main branch.
-export PGSQL_TAG=15
+export PGSQL_TAG=16
 # Password.
 export PGSQL_PASSWD=moodle
 
