@@ -44,8 +44,6 @@ After the installation, you should have the following:
 - Apache server
 - PHP versions supported by the lowest security-supported version of Moodle and the next major Moodle version (`main`).
   - PHP versions supported by [currently supported versions](https://moodledev.io/general/releases):
-    - PHP 7.4
-    - PHP 8.0
     - PHP 8.1
     - PHP 8.2
     - PHP 8.3
