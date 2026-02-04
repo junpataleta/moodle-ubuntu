@@ -48,16 +48,12 @@ sudo apt install docker-compose-plugin
 # Use docker as non-root user.
 dockerd-rootless-setuptool.sh install
 
-# Install ngrok.
-snap install ngrok
-
 # Create apps folder.
 mkdir $APPS_DIR
 
 # Copy scripts to apps folder.
 cp ./scripts/* $APPS_DIR
 chmod +x $APPS_DIR/switchphp.sh
-chmod +x $APPS_DIR/runngrok.sh
 
 # Install required programs.
 sudo apt install -y curl git default-jdk

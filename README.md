@@ -71,7 +71,6 @@ After the installation, you should have the following:
   - Selenium
     - Just run the command `sel` to start the Selenium server.
 - Docker with Docker compose
-- Ngrok
 - Adminer: `http://localhost/adminer.php`
 
 Enjoy!
