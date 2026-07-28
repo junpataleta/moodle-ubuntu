@@ -36,6 +36,7 @@ export MYSQLI_PORT=3307
 # php-sqlsrv extension version. Check https://pecl.php.net/package/sqlsrv.
 export SQLSRV_VER=5.10.1
 
+# IMPORTANT: Oracle support will be dropped when 4.5 support ends.
 # Oracle Instantclient URLS (v21.8)
 export INSTANTCLIENT_BASIC_URL=https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-basic-linux.x64-21.8.0.0.0dbru.zip
 export INSTANTCLIENT_SDK_URL=https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-sdk-linux.x64-21.8.0.0.0dbru.zip
