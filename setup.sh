@@ -245,7 +245,11 @@ source ~/.bashrc
 # php admin/tool/behat/cli/init.php -j=2 -o
 
 # Install nvm.
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
+NVM_VERSION="$(git ls-remote --tags --refs https://github.com/nvm-sh/nvm.git \
+  | awk -F/ '{print $3}' \
+  | sort -V \
+  | tail -n1)"
+curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
